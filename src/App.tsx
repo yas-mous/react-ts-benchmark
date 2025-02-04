@@ -1,108 +1,49 @@
-import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import './App.css'
+import ImageDisplay from './components/ImageDisplay';
+import reactLogo from './assets/react.svg'
+import NamesGenerator from './components/NamesGenerator';
 
-const inspirations = ["Innovative", "Smart", "Future", "NextGen", "Eco", "Global", "Digital", "Agile", "Bright", "Creative"];
-const sectors = ["Health", "Finance", "Education", "Energy", "Food", "Travel", "Tech", "Retail", "Entertainment", "Sustainability"];
-const technologies = ["AI", "Blockchain", "IoT", "Cloud", "VR", "AR", "Big Data", "Robotics", "5G", "Cybersecurity"];
 
-interface Project {
-  id: number;
-  name: string;
-}
 
-function App() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [selected, setSelected] = useState<number | undefined>(undefined);
-  const [id, setId] = useState(1);
-
-  const _random = (max: number) => Math.round(Math.random() * 1000) % max;
-
-  const generateProjects = (count = 1000): Project[] => {
-    const newProjects: Project[] = [];
-    for (let i = 0; i < count; i++) {
-      newProjects.push({
-        id: id + i,
-        name: `${inspirations[_random(inspirations.length)]} ${sectors[_random(sectors.length)]} ${technologies[_random(technologies.length)]}`
-      });
-    }
-    setId(prevId => prevId + count);
-    return newProjects;
-  };
-
-  const run = () => {
-    setProjects(generateProjects());
-  };
-
-  const add = () => {
-    setProjects(prev => [...prev, ...generateProjects(1000)]);
-  };
-
-  const update = () => {
-    setProjects(prev => 
-      prev.map(project => 
-        project.id % 10 === 0 
-          ? { ...project, name: `${project.name} 2.0` } 
-          : project
-      )
-    );
-  };
-
-  const runLots = () => {
-    setProjects(generateProjects(10000));
-    setSelected(undefined);
-  };
-
-  const clear = () => {
-    setProjects([]);
-    setSelected(undefined);
-  };
-
-  const swapRows = () => {
-    if (projects.length > 998) {
-      const newProjects = [...projects];
-      [newProjects[1], newProjects[998]] = [newProjects[998], newProjects[1]];
-      setProjects(newProjects);
-    }
-  };
-
-  const select = (project: Project, e: React.MouseEvent) => {
-    e.preventDefault();
-    setSelected(project.id);
-  };
-
-  const deleteProject = (project: Project, e: React.MouseEvent) => {
-    e.preventDefault();
-    setProjects(prev => prev.filter(p => p.id !== project.id));
-  };
+// Composant pour la page d'accueil
+const Home = () => {
+  const version = "1.0.0"; 
 
   return (
     <div className="container">
-      <h1>Générateur de Noms de Projets (React)</h1>
-      <div className="buttons">
-        <button onClick={run}>Générer 1000 projets</button>
-        <button onClick={add}>Ajouter 1000 projets</button>
-        <button onClick={update}>Mettre à jour</button>
-        <button onClick={runLots}>Générer 10 000 projets</button>
-        <button onClick={clear}>Tout supprimer</button>
-        <button onClick={swapRows}>Échanger des lignes</button>
-      </div>
-      <table>
-        <tbody>
-          {projects.map(project => (
-            <tr 
-              key={project.id} 
-              className={project.id === selected ? 'selected' : ''}
-            >
-              <td>{project.id}</td>
-              <td onClick={(e) => select(project, e)}>{project.name}</td>
-              <td>
-                <button onClick={(e) => deleteProject(project, e)}>Supprimer</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <img src={reactLogo} alt="Logo" className="logo" />
+
+      <h1>
+        Bienvenue sur la page d'accueil utilisant React <span className="version">{version}</span>
+      </h1>
+
+      <p className="description">Ceci est une application de tests pour mesurer les performances de React</p>
+
+      <nav className="nav-container">
+        <Link to="/names-generator" className="button">
+          🚀 Test N°1: Générateur de noms
+        </Link>
+        <Link to="/image-display" className="button">
+          🖼️ Test N°2: Affichage d'images
+        </Link>
+      </nav>
     </div>
   );
-}
+};
+
+
+// Composant principal de l'application
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/names-generator" element={<NamesGenerator />} />
+        <Route path="/image-display" element={<ImageDisplay />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;
