@@ -8,7 +8,7 @@ import NamesGenerator from './components/NamesGenerator';
 
 // Composant pour la page d'accueil
 const Home = () => {
-  const version = "1.0.0"; 
+  const version = "18.3.1"; 
 
   return (
     <div className="container">

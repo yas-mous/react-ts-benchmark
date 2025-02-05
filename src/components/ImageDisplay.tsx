@@ -13,14 +13,15 @@ const ImageDisplay: React.FC = () => {
 
     const endTime = performance.now(); // Fin du chrono
     setRenderTime(endTime - startTime);
+    console.log(renderTime);
   }, []); // Le tableau vide [] permet de n'exécuter cet effet qu'une seule fois au montage du composant
 
   return (
     <div className="image-container">
+      <div>Temps de rendu React: {renderTime.toFixed(2)} ms</div>
       {images.map((img, index) => (
         <img key={index} src={img} alt="Test image" />
       ))}
-      <div>Temps de rendu React: {renderTime.toFixed(2)} ms</div>
     </div>
   );
 };
